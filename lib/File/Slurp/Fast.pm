@@ -4,7 +4,7 @@ package File::Slurp::Fast;
 
 =head1 DESCRIPTION
 
-In most of the cases, you don't want to use this, but L<File::Slurp> instead.
+In most of the cases, you don't want to use this, but L<File::Slurpi::Tiny> instead.
 
 This class is able to slurp a line from a file without loading the whole file in
 memory. When you want to deal with files of millions of lines, on a limited
