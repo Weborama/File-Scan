@@ -1,4 +1,5 @@
 package File::Scan;
+
 #ABSTRACT: file parser intended for big files that doesn't fit into main memory.
 
 =head1 DESCRIPTION
@@ -38,7 +39,7 @@ Required, file path as a string.
 =cut
 
 has path => (
-    is      => 'ro',
+    is       => 'ro',
     required => 1,
 );
 
@@ -62,7 +63,7 @@ Optional, flag to tell if the file is utf8-encoded, default is true.
 
 has is_utf8 => (
     is      => 'ro',
-    default => sub { 1 },
+    default => sub {1},
 );
 
 =method slurp_line 
@@ -97,16 +98,16 @@ has _fh => (
         my ($self) = @_;
         my $open_file_param = "<:crlf";
         IO::File->new( $self->path, $open_file_param )
-          or croak "Failed to open file '".$self->path."' : '$!'";
+          or croak "Failed to open file '" . $self->path . "' : '$!'";
     }
 );
 
 # File stat array
 has _stat => (
-    is      => 'lazy',
+    is => 'lazy',
 );
 
-sub _build__stat { 
+sub _build__stat {
     my ($self) = @_;
     my @stat = stat( $self->_fh );
     return \@stat;
@@ -133,9 +134,9 @@ sub _build_index {
     my ($blocksize) = @{ $self->_stat }[11];
     $blocksize ||= 8192;
 
-    my $buffer          = '';
-    my $offset          = 0;
-    my $line_number     = 0;
+    my $buffer      = '';
+    my $offset      = 0;
+    my $line_number = 0;
 
     # make sure we jump to the begining of the file
     seek( $self->_fh, 0, SEEK_SET );
