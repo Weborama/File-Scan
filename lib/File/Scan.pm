@@ -55,9 +55,11 @@ has line_separator => (
     default => sub {qw/(\015\012|\015|\012)/},
 );
 
-=attr utf8
+=attr is_utf8
 
-Optional, flag to tell if the file is utf8-encoded, default is true.
+Optional, flag to tell if the file is utf8-encoded, default is true. 
+
+If true, the line returned by C<slurp_line> will be decoded.
 
 =cut
 
