@@ -7,7 +7,7 @@ use File::Spec;
 use File::Basename 'dirname';
 use utf8;
 
-use File::Scan;
+use File::Slurp::Fast;
 
 my $dir = File::Spec->rel2abs( dirname(__FILE__) );
 my $txt_file = File::Spec->catfile( $dir, 'data', 'somefile.txt' );
@@ -18,7 +18,7 @@ my @lines = (
     'and', 'a ', 'fourth.', "some utf8 ★ ", '', 'A line after an empty one.',
 );
 
-my $file = File::Scan->new( path => $txt_file );
+my $file = File::Slurp::Fast->new( path => $txt_file );
 
 my $count = 0;
 foreach my $line (@lines) {

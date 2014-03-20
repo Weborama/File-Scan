@@ -4,11 +4,11 @@ use strict;
 use warnings;
 use Test::More;
 use Benchmark 'cmpthese';
-use File::Scan;
+use File::Slurp::Fast;
 use File::Slurp 'read_file';
 
 my $FILE = $ARGV[0];
-my $scan = File::Scan->new(path => $FILE );
+my $scan = File::Slurp::Fast->new(path => $FILE );
 my $count = 1000;
 
 sub in_memory { 
@@ -18,8 +18,8 @@ sub in_memory {
 }
 
 cmpthese($count, {
-    'In Memory' => sub { in_memory(10) },
-    'File::Scan' => sub { $scan->slurp_line(10) },
+    'File::Slurp' => sub { in_memory(10) },
+    'File::Slurp::Fast' => sub { $scan->slurp_line(10) },
 });
 
 done_testing;

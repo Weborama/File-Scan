@@ -1,4 +1,4 @@
-package File::Scan;
+package File::Slurp::Fast;
 
 #ABSTRACT: file parser intended for big files that doesn't fit into main memory.
 
