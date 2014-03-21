@@ -1,20 +1,21 @@
 package File::Sip;
 
-#ABSTRACT: file parser intended for big files that doesn't fit into main memory.
+#ABSTRACT: file parser intended for big files that don't fit into main memory.
 
 =head1 DESCRIPTION
 
 In most of the cases, you don't want to use this, but L<File::Slurp::Tiny> instead.
 
-This class is able to slurp a line from a file without loading the whole file in
+This class is able to read a line from a file without loading the whole file in
 memory. When you want to deal with files of millions of lines, on a limited
 environment, brute force isn't an option.
 
 An index of all the lines in the file is built in order to be able to access
-them almost instantly.
+their starting position depending on their line number.
 
 The memory used is then limited to the size of the index (HashRef of line
-numbers / position values) plus the size of the line that is read.
+numbers / position values) plus the size of the line that is read (until the
+line separator character is reached).
 
 It also provides a way to nicely iterate over all the lines of the file, using
 only the amount of memory needed to store one line at a time, not the whole file.
@@ -31,6 +32,7 @@ use Moo;
 use Carp 'croak';
 use IO::File;
 use Encode qw(decode);
+use feature ':5.10';
 
 =attr path
 
@@ -68,19 +70,35 @@ has is_utf8 => (
     default => sub {1},
 );
 
-=method slurp_line 
+=method read_line
 
-Return the line content at the given position.
+Return the line content at the given position (terminated by C<line_separator>).
 
-    my $line_content = $self->slurp_line( $line_number );
+    my $line = $sip->read_line( $line_number );
+
+It's also possible to read the entire file, line by line without providing a
+line number to the method, until C<undef> is returned:
+
+    while (my $line = $sip->read_line()) {
+        # do something with $line
+    }
 
 =cut
 
-sub slurp_line {
+# internal cursor for iterations
+has _read_line_position => (
+    is => 'rw',
+    default => sub { 0 },
+);
+
+sub read_line {
     my ( $self, $line_number ) = @_;
 
+    $line_number //= $self->_read_line_position;
     my $fh         = $self->_fh;
     my $line_index = $self->index->{$line_number};
+    return if !defined $line_index;
+
     my $previous_line_index =
       ( $line_number == 0 ) ? 0 : $self->index->{ $line_number - 1 };
 
@@ -88,7 +106,9 @@ sub slurp_line {
     seek( $fh, $previous_line_index, 0 );
     read( $fh, $line, $line_index - $previous_line_index );
 
-    return decode( "utf8", $line ) if $self->is_utf8;
+    $self->_read_line_position($line_number + 1) if @_ == 1;
+
+    return decode( "utf8", $line ) if defined $line && $self->is_utf8;
     return $line;
 }
 
