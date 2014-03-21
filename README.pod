@@ -1,0 +1,88 @@
+=pod
+
+=head1 NAME
+
+File::Sip - file parser intended for big files that don't fit into main memory.
+
+=head1 VERSION
+
+version 0.002
+
+=head1 DESCRIPTION
+
+In most of the cases, you don't want to use this, but L<File::Slurp::Tiny> instead.
+
+This class is able to read a line from a file without loading the whole file in
+memory. When you want to deal with files of millions of lines, on a limited
+environment, brute force isn't an option.
+
+An index of all the lines in the file is built in order to be able to access
+their starting position depending on their line number.
+
+The memory used is then limited to the size of the index (HashRef of line
+numbers / position values) plus the size of the line that is read (until the
+line separator character is reached).
+
+It also provides a way to nicely iterate over all the lines of the file, using
+only the amount of memory needed to store one line at a time, not the whole file.
+
+=head1 ATTRIBUTES
+
+=head2 path
+
+Required, file path as a string.
+
+=head2 line_separator
+
+Optional, regular expression of the newline seperator, default is
+C</(\015\012|\015|\012)/>.
+
+=head2 is_utf8
+
+Optional, flag to tell if the file is utf8-encoded, default is true. 
+
+If true, the line returned by C<slurp_line> will be decoded.
+
+=head2 index
+
+Index that contains positions of all lines of the file, usage:
+
+    $self->index->{ $line_number } = $seek_position;
+
+=head1 METHODS
+
+=head2 read_line
+
+Return the line content at the given position (terminated by C<line_separator>).
+
+    my $line = $sip->read_line( $line_number );
+
+It's also possible to read the entire file, line by line without providing a
+line number to the method, until C<undef> is returned:
+
+    while (my $line = $sip->read_line()) {
+        # do something with $line
+    }
+
+=head1 ACKNOWLEDGMENT
+
+This module was written at Weborama when dealing with huge raw files, where huge
+means "oh no, it really won't fit anymore in this compute slot!" (which are
+limited in main-memory).
+
+=head1 AUTHORS
+
+This module has been written at Weborama by Alexis Sukrieh and Bin Shu.
+
+=head1 AUTHOR
+
+Alexis Sukrieh <sukria@sukria.net>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2014 by Weborama.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
