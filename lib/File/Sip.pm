@@ -183,6 +183,22 @@ sub _build_index {
 1;
 __END__
 
+=head1 BENCHMARK
+
+C<File::Sip> is not faster than in-memory parsers like L<File::Slurp::Tiny> but
+it has a low memory footprint. With small files, it's not obvious (when the file
+is small, the cost of the index is almost equal to the cost of all the
+characters of the file).
+But when the file gets bigger, the gain in main memory grows.
+
+With files bigger than few megabytes, C<File::Sip> will consume up to 20 times less
+memory than L<File::Slurp>. This factor of 20 appears to be an asymptotic limit
+as size of studied files grows.
+
+If you want to estimate the memory size of a running process that uses C<File::Sip>, you
+can then assume that the size of the index will be around 1/20th of the size of
+the processed file.
+
 =head1 AUTHORS
 
 This module has been written at Weborama by Alexis Sukrieh and Bin Shu.
