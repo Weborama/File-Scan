@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.003     2014-03-23 16:52:22CET+0100 Europe/Paris
+
     * Use an array instead of a hash for the internal index to reduce memory
       usage (up to 20x less memory consuming than File::Slurp with big files,
       which is 5 times better than previous versions, see README.pod).
