@@ -96,11 +96,11 @@ sub read_line {
 
     $line_number //= $self->_read_line_position;
     my $fh         = $self->_fh;
-    my $line_index = $self->index->{$line_number};
+    my $line_index = $self->index->[$line_number];
     return if !defined $line_index;
 
     my $previous_line_index =
-      ( $line_number == 0 ) ? 0 : $self->index->{ $line_number - 1 };
+      ( $line_number == 0 ) ? 0 : $self->index->[ $line_number - 1 ];
 
     my $line;
     seek( $fh, $previous_line_index, 0 );
@@ -139,7 +139,7 @@ sub _build__stat {
 
 Index that contains positions of all lines of the file, usage:
 
-    $sip->index->{ $line_number } = $seek_position;
+    $sip->index->[ $line_number ] = $seek_position;
 
 =cut
 
@@ -151,7 +151,7 @@ has index => (
 
 sub _build_index {
     my ($self) = @_;
-    my $index;
+    my $index = [];
 
     my ($blocksize) = @{ $self->_stat }[11];
     $blocksize ||= 8192;
@@ -169,7 +169,7 @@ sub _build_index {
         for my $i ( 0 .. $count ) {
             my $char = substr $buffer, $i, 1;
             if ( $char =~ /$line_sep/ ) {
-                $index->{ $line_number++ } = $offset + $i + 1;
+                $index->[ $line_number++ ] = $offset + $i + 1;
             }
         }
         $offset += $count;
