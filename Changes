@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+    * Use an array instead of a hash for the internal index to reduce memory
+      usage (up to 20x less memory consuming than File::Slurp with big files).
+
 0.002     2014-03-21 10:18:54CET+0100 Europe/Paris
 
     * Provide a README.pod with Dist::Zilla::Plugin::ReadmeAnyFromPod
