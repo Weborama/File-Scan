@@ -61,7 +61,7 @@ has line_separator => (
 
 Optional, flag to tell if the file is utf8-encoded, default is true. 
 
-If true, the line returned by C<slurp_line> will be decoded.
+If true, the line returned by C<read_line> will be decoded.
 
 =cut
 
@@ -139,7 +139,7 @@ sub _build__stat {
 
 Index that contains positions of all lines of the file, usage:
 
-    $self->index->{ $line_number } = $seek_position;
+    $sip->index->{ $line_number } = $seek_position;
 
 =cut
 
