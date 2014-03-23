@@ -13,9 +13,8 @@ environment, brute force isn't an option.
 An index of all the lines in the file is built in order to be able to access
 their starting position depending on their line number.
 
-The memory used is then limited to the size of the index (HashRef of line
-numbers / position values) plus the size of the line that is read (until the
-line separator character is reached).
+The memory used is then limited to the size of the index plus the size of the
+line that is read (until the line separator character is reached).
 
 It also provides a way to nicely iterate over all the lines of the file, using
 only the amount of memory needed to store one line at a time, not the whole file.
