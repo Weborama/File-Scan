@@ -185,7 +185,7 @@ __END__
 =head1 BENCHMARK
 
 C<File::Sip> is not faster than in-memory parsers like L<File::Slurp::Tiny> but
-it has a low memory footprint. With small files, it's not obvious (when the file
+it has a lower memory footprint. With small files, it's not obvious (when the file
 is small, the cost of the index is almost equal to the cost of all the
 characters of the file).
 But when the file gets bigger, the gain in main memory grows.
